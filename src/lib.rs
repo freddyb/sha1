@@ -1,32 +1,29 @@
-pub fn sha1(input: &[u8]) -> [u8, ..20] {
+pub fn sha1(input: &[u8]) -> [u32, ..5] {
     //FIXME change this
-    let empty_output: [u8, ..20] = [
-    0xDA, 0x39, 0xA3, 0xEE, 0x5E, 0x6B, 0x4B, 0x0D, 0x32, 0x55, 0xBF, 0xEF, 0x95, 0x60, 0x18, 0x90, 0xAF, 0xD8, 0x07, 0x09];
+    //let empty_output: [u8, ..20] = [
+    //0xDA, 0x39, 0xA3, 0xEE, 0x5E, 0x6B, 0x4B, 0x0D, 0x32, 0x55, 0xBF, 0xEF, 0x95, 0x60, 0x18, 0x90, 0xAF, 0xD8, 0x07, 0x09];
 
 
-    let h: [u32, ..5] = [0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476, 0xc3d2e1f0];    
+    let mut h: [u32, ..5] = [0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476, 0xc3d2e1f0];
 
     let length = input.len();
     println!("Input lenght is {}", length);
 
     for chunk in input.as_slice().chunks(64) {
         if chunk.len() == 64 {
-            process_block(h.as_slice(), chunk);
+            process_block(h.as_mut_slice(), chunk);
         }
         else {
             println!("I forgot to build handling for the last chunk, which is not 64 in size");
         }
     }
-     
-    return empty_output;
+
+    return h;
 }
 
-fn process_block(origh: &[u32], block: &[u8]) -> [u32, ..5] {
-    println!("I should handle a block, but won't. hehehe!!");
-    println!("hex block: {}", hex(block));
+fn process_block(h: &mut [u32], block: &[u8]) {
+    //println!("hex block: {}", hex(block));
 
-    let mut h = origh.clone();
-    
         assert_eq!(block.len(), 64);
 
         let mut words = [0u32, ..80];
@@ -83,7 +80,6 @@ fn process_block(origh: &[u32], block: &[u8]) -> [u32, ..5] {
         h[3] += d;
         h[4] += e;
 
-        return h.as_slice();
 }
 
 //fn bitrotate_l(block: &[u32], n: &[u8]) -> [u32] {
@@ -94,6 +90,13 @@ fn process_block(origh: &[u32], block: &[u8]) -> [u32, ..5] {
 //}
 
 
-pub fn hex(buf: &[u8]) -> String {
-    buf.iter().fold(String::new(), |a, &b| format!("{}{:02x}", a, b))
+pub fn print_hex(buf: &[u32]) {
+    //let out = "";
+    for chunk in buf.iter() {
+        print!("{:02x}",  *chunk        & 0xFF);
+        print!("{:02x}", (*chunk >>  8) & 0xFF);
+        print!("{:02x}", (*chunk >> 16) & 0xFF);
+        print!("{:02x}", (*chunk >> 24) & 0xFF);
+    }
+    println!("");
 }

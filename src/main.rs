@@ -3,7 +3,7 @@ extern crate sha1;
 use std::io;
 
 use sha1::sha1;
-use sha1::hex;
+use sha1::print_hex;
 
 
 fn main() {
@@ -13,5 +13,5 @@ fn main() {
                              .expect("Failed to read line.");
 
     
-    println!("{}", hex(sha1(input.as_bytes()))) ;
+    print_hex(&sha1(input.trim().as_bytes()));
 }
