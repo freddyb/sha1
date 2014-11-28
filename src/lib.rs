@@ -8,10 +8,10 @@ pub fn sha1(input: &[u8]) -> [u32, ..5] {
 
     let mut h: [u32, ..5] = [0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476, 0xc3d2e1f0];
 
-    let length = input.len();
+    let length: u32 = input.len() as u32;
     println!("Input lenght is {}", length);
 
-    let mut cur_length: uint = 0;
+    let mut cur_length: u32 = 0;
     for chunk in input.as_slice().chunks(64) {
         if chunk.len() == 64 {
             process_block(h.as_mut_slice(), chunk);
@@ -87,16 +87,16 @@ fn process_block(h: &mut [u32], block: &[u8]) {
 
 }
 
-fn last_block(h: &mut [u32], input: &[u8], cur_length: uint) {
-    let length: u64 = input.len() as u64;
+fn last_block(h: &mut [u32], input: &[u8], cur_length: u32) {
+    let length: u32 = input.len() as u32;
 
 // m = SHA1-object. h = h.
 
     let mut w = MemWriter::new();
     w.write(input.as_slice());
     w.write_u8(0x80 as u8);
-    w.write(Vec::from_elem((56u - cur_length - 1u), 0x00 as u8).as_slice());
-    w.write_be_u64((length * 8));
+    w.write(Vec::from_elem((56u - (cur_length as uint)- 1u), 0x00 as u8).as_slice());
+    w.write_be_u64((length * 8) as u64);
 
     process_block(h.as_mut_slice(), w.get_ref());
 
