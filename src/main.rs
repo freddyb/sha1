@@ -14,4 +14,6 @@ fn main() {
 
     
     print_hex(&sha1(input.trim().as_bytes()));
+
+    return;
 }

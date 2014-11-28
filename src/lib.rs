@@ -1,3 +1,5 @@
+use std::io::{MemWriter};
+
 pub fn sha1(input: &[u8]) -> [u32, ..5] {
     //FIXME change this
     //let empty_output: [u8, ..20] = [
@@ -9,12 +11,15 @@ pub fn sha1(input: &[u8]) -> [u32, ..5] {
     let length = input.len();
     println!("Input lenght is {}", length);
 
+    let mut cur_length: uint = 0;
     for chunk in input.as_slice().chunks(64) {
         if chunk.len() == 64 {
             process_block(h.as_mut_slice(), chunk);
+            cur_length += 64;
         }
         else {
-            println!("I forgot to build handling for the last chunk, which is not 64 in size");
+            println!("handling last block and finishing up the thing");
+            last_block(h.as_mut_slice(), input, cur_length);
         }
     }
 
@@ -79,6 +84,21 @@ fn process_block(h: &mut [u32], block: &[u8]) {
         h[2] += c;
         h[3] += d;
         h[4] += e;
+
+}
+
+fn last_block(h: &mut [u32], input: &[u8], cur_length: uint) {
+    let length: u64 = input.len() as u64;
+
+// m = SHA1-object. h = h.
+
+    let mut w = MemWriter::new();
+    w.write(input.as_slice());
+    w.write_u8(0x80 as u8);
+    w.write(Vec::from_elem((56u - cur_length - 1u), 0x00 as u8).as_slice());
+    w.write_be_u64((length * 8));
+
+    process_block(h.as_mut_slice(), w.get_ref());
 
 }
 
