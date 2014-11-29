@@ -1,10 +1,10 @@
-extern crate sha1;
+extern crate crypto;
+extern crate serialize;
+
 
 use std::io;
-
-use sha1::sha1;
-use sha1::print_hex;
-
+use crypto::hash::{Hasher, sha1};
+use serialize::hex::ToHex;
 
 fn main() {
 
@@ -12,8 +12,12 @@ fn main() {
                              .ok()
                              .expect("Failed to read line.");
 
+    let mut m = sha1::SHA1::new();
+    m.update(input.trim().as_bytes());
+
+    let hh = m.digest().as_slice().to_hex();
+    println!("{}", hh);
     
-    print_hex(&sha1(input.trim().as_bytes()));
 
     return;
 }

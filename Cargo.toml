@@ -3,3 +3,7 @@
 name = "sha1"
 version = "0.0.1"
 authors = ["frederik b <freddy@flashpad>"]
+
+[dependencies.crypto]
+
+git = "https://github.com/freddyb/crypto-rs.git"

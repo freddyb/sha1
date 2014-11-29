@@ -1,4 +1,20 @@
 [root]
 name = "sha1"
 version = "0.0.1"
+dependencies = [
+ "crypto 0.1.0 (git+https://github.com/freddyb/crypto-rs.git)",
+]
+
+[[package]]
+name = "crypto"
+version = "0.1.0"
+source = "git+https://github.com/freddyb/crypto-rs.git#fa14e34e704aff88468eccc35a8fb5ac6a76aaa8"
+dependencies = [
+ "num 0.0.5 (git+https://github.com/rust-lang/num)",
+]
+
+[[package]]
+name = "num"
+version = "0.0.5"
+source = "git+https://github.com/rust-lang/num#16787045e5f9764626a3d5cfbee4655e06efaccf"
 
